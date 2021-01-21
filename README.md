@@ -20,5 +20,5 @@ Usage: ./hdrplus [-c comp -g gain (optional)] dir_path out_img raw_img1 raw_img2
 example: ./hdrplus $HOME/images/hdr_samples/RAWs temp.jpg burst3_5.CR2 burst3_5.CR2
 ```
 
-The -c and -g flags change the amount of dynamic range compression and gain respectively. Although they are optional because they both have default values. 
+The -c and -g flags change the amount of dynamic range compression and gain respectively. Although they are optional because they both have default values.
 
