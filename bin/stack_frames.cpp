@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     Burst burst(dir_path, in_names);
 
     const auto merged = align_and_merge(burst.ToBuffer());
-    std::cerr << "merged size: " << merged.width() << " " << merged.height() << std::endl;
+    std::cerr << "merged size: " << merged.width() << "x" << merged.height() << std::endl;
 
     const RawImage& raw = burst.GetRaw(0);
     const std::string merged_filename = dir_path + "/" + out_name;

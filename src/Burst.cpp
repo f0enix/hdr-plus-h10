@@ -23,6 +23,8 @@ std::vector<RawImage> Burst::LoadRaws(const std::string &dirPath, std::vector<st
         const std::string img_path = dirPath + "/" + input;
         result.emplace_back(img_path);
     }
+    std::cerr << "returning result " << result.size() << std::endl;
+
     return result;
 }
 

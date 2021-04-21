@@ -20,8 +20,8 @@ public:
     const Compression c;
     const Gain g;
     
-    HDRPlus(Burst burst, const Compression  c, const Gain g)
-        : burst(burst)
+    HDRPlus(Burst& burst1, const Compression  c, const Gain g)
+        : burst(burst1)
         , c(c)
         , g(g)
     {
@@ -107,16 +107,23 @@ int main(int argc, char* argv[]) {
     while (i < argc) {
         in_names.emplace_back(argv[i++]);
     }
-
+    auto now = std::chrono::steady_clock::now();
     Burst burst(dir_path, in_names);
 
     HDRPlus hdr_plus(burst, c, g);
-
+    auto now2 = std::chrono::steady_clock::now();
+        
     Halide::Runtime::Buffer<uint8_t> output = hdr_plus.process();
+    auto now3 = std::chrono::steady_clock::now();
+    double durationMs = std::chrono::duration <double, std::milli>(now3 - now2).count();
+    std::cerr << "hdr process took " << std::to_string(durationMs/1000) << std::endl;
 
+    auto now4 = std::chrono::steady_clock::now();
+    double durationMs2 = std::chrono::duration <double, std::milli>(now4 - now).count();
+    
     if (!HDRPlus::save_png(dir_path, out_name, output)) {
         return EXIT_FAILURE;
     }
-
+    std::cerr << "total process took " << std::to_string(durationMs2/1000) << std::endl;
     return 0;
 }

@@ -5,7 +5,7 @@
 #include <libraw/libraw.h>
 
 #include "InputSource.h"
-
+#include <array>
 LibRaw2DngConverter::LibRaw2DngConverter(const RawImage& raw)
     : OutputStream()
     , Raw(raw)
@@ -32,17 +32,23 @@ LibRaw2DngConverter::TiffPtr LibRaw2DngConverter::SetTiffFields(LibRaw2DngConver
     TIFFSetField(tiff, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
     TIFFSetField(tiff, TIFFTAG_CFAREPEATPATTERNDIM, &bayer_pattern_dimensions);
 
-    const std::string cfa = Raw.GetCfaPatternString();
-    TIFFSetField(tiff, TIFFTAG_CFAPATTERN, cfa.c_str());
+    // const std::string cfa = Raw.GetCfaPatternString();
+    // const std::string cfa = "\00\01\01\02";
+    // std::cerr << "rGetCfaPatternString " << cfa.c_str() << std::endl;
+    // TIFFSetField(tiff, TIFFTAG_CFAPATTERN, cfa.c_str());
+    TIFFSetField(tiff, TIFFTAG_CFAPATTERN, 4,"\00\01\01\02");
+
 
     TIFFSetField(tiff, TIFFTAG_MAKE, "hdr-plus");
     TIFFSetField(tiff, TIFFTAG_UNIQUECAMERAMODEL, "hdr-plus");
 
-    const std::array<float, 9> color_matrix = {
-        raw_color.cam_xyz[0][0], raw_color.cam_xyz[0][1], raw_color.cam_xyz[0][2],
-        raw_color.cam_xyz[1][0], raw_color.cam_xyz[1][1], raw_color.cam_xyz[1][2],
-        raw_color.cam_xyz[2][0], raw_color.cam_xyz[2][1], raw_color.cam_xyz[2][2],
-    };
+    // const std::array<float, 9> color_matrix = {
+    //     raw_color.cam_xyz[0][0], raw_color.cam_xyz[0][1], raw_color.cam_xyz[0][2],
+    //     raw_color.cam_xyz[1][0], raw_color.cam_xyz[1][1], raw_color.cam_xyz[1][2],
+    //     raw_color.cam_xyz[2][0], raw_color.cam_xyz[2][1], raw_color.cam_xyz[2][2],
+    // };
+    // ColorMatrix1: 
+    const std::array<float, 9> color_matrix = {1.507, -0.888, -0.134, -0.536, 1.542, 0.147, -0.019, 0.095, 0.76};
     TIFFSetField(tiff, TIFFTAG_COLORMATRIX1, 9, &color_matrix);
     TIFFSetField(tiff, TIFFTAG_CALIBRATIONILLUMINANT1, 21); // D65
 
@@ -57,7 +63,11 @@ LibRaw2DngConverter::TiffPtr LibRaw2DngConverter::SetTiffFields(LibRaw2DngConver
     TIFFSetField(tiff, TIFFTAG_CFAPLANECOLOR, 3, "\00\01\02"); // RGB https://www.awaresystems.be/imaging/tiff/tifftags/cfaplanecolor.html
 
     const std::array<float, 4> black_level = Raw.GetBlackLevel();
-    TIFFSetField(tiff, TIFFTAG_BLACKLEVEL, 4, &black_level);
+    // TIFFSetField(tiff, TIFFTAG_BLACKLEVEL, 4, &black_level);
+    TIFFSetField(tiff, TIFFTAG_BLACKLEVEL, 1, &black_level[0]);
+    TIFFSetField(tiff, TIFFTAG_BASELINEEXPOSURE, 3.0);
+    
+
 
     static const uint32_t white_level = raw_color.maximum;
     TIFFSetField(tiff, TIFFTAG_WHITELEVEL, 1, &white_level);

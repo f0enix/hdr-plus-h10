@@ -7,11 +7,10 @@ export HALIDE_BUILD_DIR=${MY_ROOT}/3rdparty/Halide-10.0.0/build
 export HALIDE_INSTALL_DIR=${MY_ROOT}/3rdparty/Halide-10.0.0/install
 export BUILD_DIR=${MY_ROOT}/build
 export HALIDE_DISTRIB_DIR=${HALIDE_INSTALL_DIR}
-
+export LLVM_DIR=/usr/local/Cellar/llvm/11.1.0_1/lib/cmake
 ###############################¨
 # Install Halide 10.0.0
 ###############################¨
-sudo apt install clang-10 llvm-10 libclang-10-dev
 mkdir -p ${THIRDPARTY_DIR} && cd ${THIRDPARTY_DIR}
 wget https://github.com/halide/Halide/archive/v10.0.0.zip
 unzip -o v10.0.0.zip
@@ -25,7 +24,8 @@ make -j 8 install
 ###############################¨
 # Install HDR+
 ###############################¨
-sudo apt update && sudo apt install -y libtiff-dev libraw-dev libpng-dev libjpeg-dev zlib1g-dev
 mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
 cmake -DHALIDE_DISTRIB_DIR=${HALIDE_DISTRIB_DIR} -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 cd ${BUILD_DIR} && make -j 8 all 
+cp -f hdrplus ../hdrplus
+cp -f stack_frames ../stack_frames

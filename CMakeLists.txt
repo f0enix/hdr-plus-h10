@@ -64,7 +64,7 @@ add_halide_library(align_and_merge
 
 add_executable(hdrplus bin/HDRPlus.cpp ${src_files})
 add_dependencies(hdrplus hdrplus_pipeline)
-target_link_libraries(hdrplus hdrplus_pipeline Halide png ${LIBRAW_LIBRARY} ${TIFF_LIBRARIES} ${TIFFXX_LIBRARY})
+target_link_libraries(hdrplus hdrplus_pipeline Halide ${PNG_LIBRARIES} ${LIBRAW_LIBRARY} ${TIFF_LIBRARIES} ${TIFFXX_LIBRARY})
 
 add_executable(stack_frames bin/stack_frames.cpp ${src_files})
 add_dependencies(stack_frames align_and_merge)

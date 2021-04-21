@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <unordered_map>
-
+#include <array>
 #include "LibRaw2DngConverter.h"
 
 RawImage::RawImage(const std::string &path)
